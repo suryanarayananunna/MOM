@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# local logs/artifacts
+*.log
+
+# local model artifacts (too large for normal git)
+Models/*.gguf
+
+# editor
+.vscode/
+
+# temporary runtime files
+*.tmp

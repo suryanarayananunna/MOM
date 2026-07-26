@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.mom.focusguard</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-lc</string>
+    <string>exec '__SCRIPT_PATH__'</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>INTERVAL_SECONDS</key>
+    <string>6</string>
+    <key>ALARM_REPEAT_SECONDS</key>
+    <string>8</string>
+    <key>DRY_RUN</key>
+    <string>0</string>
+    <key>RETENTION_DAYS</key>
+    <string>3</string>
+    <key>MOM_LOCAL_LLM_EXECUTABLE</key>
+    <string>__LLAMA_EXECUTABLE__</string>
+    <key>MOM_LOCAL_LLM_MODEL_PATH</key>
+    <string>__LLM_MODEL_PATH__</string>
+    <key>MOM_LOCAL_LLM_THREADS</key>
+    <string>2</string>
+    <key>MOM_LOCAL_LLM_MAX_TOKENS</key>
+    <string>96</string>
+    <key>MOM_LOCAL_LLM_TEMPERATURE</key>
+    <string>0.1</string>
+    <key>MOM_LOCAL_LLM_TIMEOUT_SECONDS</key>
+    <string>25</string>
+    <key>DATA_ROOT</key>
+    <string>__DATA_ROOT__</string>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/mom-focusguard.out.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/tmp/mom-focusguard.err.log</string>
+</dict>
+</plist>
