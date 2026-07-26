@@ -1,68 +1,41 @@
 # MOM FocusGuard
 
-MOM FocusGuard is a local-first productivity enforcement toolkit that blocks distraction loops with lightweight monitoring and intervention.
+MOM FocusGuard helps people break distraction loops while working.
 
-This repository is designed as a production-focused project with:
-- production-oriented scripts
-- cross-platform support in one repo
-- privacy-first defaults (no cloud APIs)
-- clear architecture and setup documentation
+It is built for people who keep drifting into social media, streaming, or endless scrolling during work/study sessions. The project watches activity, detects unproductive patterns, and nudges you back into focus.
 
-## Key Features
+## What Problem This Solves
 
-- Local-only execution by default
-- Distraction enforcement with tab/window close rules
-- Away-from-system detection
-- Lightweight mode for low CPU usage
-- Sound + screen-flicker alerts
-- Platform-specific launch/daemon setup
+- Frequent context switching between work and entertainment.
+- Losing long blocks of focused time.
+- Needing a lightweight, local-first guardrail instead of a heavy app.
 
-## Privacy Model
+## What This Repo Does
 
-- No data is sent to internet endpoints by default.
+- Detects distraction activity (for example streaming/social browsing).
+- Detects away-from-system behavior.
+- Enforces focus rules (close tab, play sound, visual alert).
+- Runs in the background with low resource usage.
+- Supports macOS, Windows, and Android (ADB mode) in one repository.
+
+## Privacy And Offline Use
+
+- Local-first by default.
+- No cloud API calls are required for core behavior.
+- Works without internet for monitoring/enforcement logic.
 - Capture persistence is disabled by default on macOS.
-- Optional local artifacts are kept under platform-specific app-data paths.
-
-## Repository Layout
-
-```text
-MOM/
-  Models/
-    Qwen2.5-0.5B-Instruct-Q4_K_M.gguf
-  scripts/
-    focus_guard.sh
-    focus_guard.launchd.plist
-    install_focus_guard.sh
-  platforms/
-    windows/
-      focus_guard.ps1
-      install_focus_guard.ps1
-    android/
-      adb_focus_guard.sh
-      install_android_guard.sh
-  config/
-    focus_guard.env.example
-  docs/
-    architecture.md
-    setup-macos.md
-    setup-windows.md
-    setup-android.md
-    troubleshooting.md
-```
 
 ## Platform Support
 
 | Platform | Status | Runtime |
 |---|---|---|
-| macOS | Working | launchd + Bash |
+| macOS | Working | launchd + shell script |
 | Windows | Working | PowerShell + Task Scheduler |
-| Android | Working (ADB mode) | Bash + adb shell |
+| Android | Working (ADB mode) | Host script + adb |
 
-Android support is implemented via ADB (USB or wireless debugging) from a desktop host. This enables reproducible setup without requiring a custom APK.
+## Quick Setup
 
-## Quick Start
-
-### 1) macOS
+### macOS
 
 ```bash
 cd scripts
@@ -70,7 +43,7 @@ cd scripts
 launchctl list | grep com.mom.focusguard
 ```
 
-### 2) Windows (PowerShell as Administrator)
+### Windows (PowerShell as Administrator)
 
 ```powershell
 cd platforms/windows
@@ -78,7 +51,7 @@ cd platforms/windows
 Get-ScheduledTask -TaskName MOMFocusGuard
 ```
 
-### 3) Android (ADB mode, from macOS/Linux shell)
+### Android (ADB mode from host machine)
 
 ```bash
 cd platforms/android
@@ -88,33 +61,32 @@ cd platforms/android
 
 ## Configuration
 
-Use `config/focus_guard.env.example` as the base for tuning:
-- enforcement aggressiveness
+Start from `config/focus_guard.env.example`.
+
+Main things you can tune:
 - check intervals
-- blocked streaming patterns
-- alert behavior
+- away detection threshold
+- blocked site/app patterns
+- alert style and strictness
 
-## Demo And Validation Flow
+## Repository Structure
 
-1. Start service.
-2. Open a productive page and show no intervention.
-3. Open YouTube watch / Hotstar / Netflix page and show block + alert.
-4. Simulate away mode and show alert behavior.
-5. Show logs and explain low-CPU design decisions.
+```text
+MOM/
+  scripts/             # macOS runtime + installer
+  platforms/windows/   # Windows runtime + installer
+  platforms/android/   # Android ADB runtime + installer
+  config/              # env examples and defaults
+  docs/                # setup and troubleshooting guides
+  Models/              # local model files (kept local, not pushed)
+```
 
-## Engineering Highlights
+## Recommended Reading
 
-- Lock-based singleton process control
-- Configurable alert throttling
-- Streak-based closure to reduce false positives
-- Lightweight classification cadence with caching
-- Separation of platform-specific launcher/install logic
-
-## Roadmap
-
-- Optional vision-capable local model path
-- Optional local dashboard UI for logs and controls
-- Optional policy packs by user profile (student, engineer, founder)
+- `docs/setup-macos.md`
+- `docs/setup-windows.md`
+- `docs/setup-android.md`
+- `docs/troubleshooting.md`
 
 ## License
 
