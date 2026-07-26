@@ -30,6 +30,7 @@ ENABLE_BROWSER_LLM="${ENABLE_BROWSER_LLM:-1}"
 SPEAK_QUOTES="${SPEAK_QUOTES:-0}"
 SCREEN_FLICKER_ENABLED="${SCREEN_FLICKER_ENABLED:-1}"
 BLOCK_STREAMING_SITES="${BLOCK_STREAMING_SITES:-1}"
+ENABLE_NOTIFICATIONS="${ENABLE_NOTIFICATIONS:-1}"
 
 BROWSERS=("Safari" "Google Chrome" "Microsoft Edge" "Brave Browser" "Arc")
 PRODUCTIVE_APPS=("Code" "Cursor" "Terminal" "iTerm2" "Xcode" "PyCharm" "IntelliJ IDEA" "WebStorm")
@@ -217,7 +218,9 @@ play_focus_feedback() {
   if [[ "$SCREEN_FLICKER_ENABLED" == "1" ]]; then
     # macOS can flash screen on alert sounds when this preference is enabled.
     defaults write com.apple.universalaccess flashScreen -bool true >/dev/null 2>&1 || true
-    osascript -e 'beep 1' >/dev/null 2>&1 || true
+    defaults -currentHost write com.apple.universalaccess flashScreen -bool true >/dev/null 2>&1 || true
+    osascript -e 'beep 2' >/dev/null 2>&1 || true
+    osascript -e 'beep 2' >/dev/null 2>&1 || true
   fi
 
   if [[ "$SPEAK_QUOTES" == "1" ]]; then
@@ -486,6 +489,7 @@ main_loop() {
   log "Webcam check interval: ${WEBCAM_CHECK_INTERVAL_SECONDS}s"
   log "Browser LLM check interval: ${BROWSER_LLM_CHECK_INTERVAL_SECONDS}s"
   log "Screen flicker enabled: ${SCREEN_FLICKER_ENABLED}"
+  log "Notifications enabled: ${ENABLE_NOTIFICATIONS}"
   log "Streaming site blocking: ${BLOCK_STREAMING_SITES}"
 
   local alarm_active=0
@@ -697,6 +701,13 @@ main_loop() {
         now="$(date +%s)"
         if (( now - last_alarm_epoch >= ALARM_REPEAT_SECONDS )); then
           play_focus_feedback
+          if [[ "$ENABLE_NOTIFICATIONS" == "1" ]]; then
+            if [[ "$away_mode" == "1" ]]; then
+              notify_user "Focus Guard" "Away from system (${idle_seconds}s). Return to work."
+            else
+              notify_user "Focus Guard" "Distraction blocked. Back to focus mode."
+            fi
+          fi
           last_alarm_epoch="$now"
         fi
         alarm_active=1
